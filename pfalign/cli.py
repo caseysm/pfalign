@@ -1253,7 +1253,7 @@ def main():
                 k_neighbors=args.k_neighbors,
             )
             np.save(args.output, result.embeddings)
-            print_info(f"[OK] Encoded {result.length()} residues to {args.output}", args.quiet)
+            print_info(f"[OK] Encoded {result.sequence_length()} residues to {args.output}", args.quiet)
 
         elif args.command == "pairwise":
             # Validate inputs
@@ -1356,19 +1356,32 @@ def main():
 
             # Load embeddings
             embeddings = [np.load(inp) for inp in inputs]
+            n = len(embeddings)
 
-            # Compute similarity matrix
-            result = similarity(embeddings, method=args.method, temperature=args.temperature)
-            np.save(args.output, result.matrix)
+            # Compute NxN similarity matrix by computing all pairwise similarities
+            similarity_matrix = np.zeros((n, n), dtype=np.float32)
+            for i in range(n):
+                for j in range(i, n):
+                    if i == j:
+                        similarity_matrix[i, j] = 1.0  # Self-similarity is 1.0
+                    else:
+                        result = similarity(embeddings[i], embeddings[j])
+                        sim_value = result.similarity_matrix[0, 0]  # Extract scalar similarity
+                        similarity_matrix[i, j] = sim_value
+                        similarity_matrix[j, i] = sim_value  # Symmetric matrix
+
+            np.save(args.output, similarity_matrix)
             print_info(f"[OK] Similarity matrix saved to {args.output}", args.quiet)
-            print_info(f"  Shape: {result.matrix.shape}", args.quiet)
-            print_info(f"  Method: {args.method}", args.quiet)
+            print_info(f"  Shape: {similarity_matrix.shape}", args.quiet)
+            print_info(f"  Sequences: {n}", args.quiet)
 
             if args.stats and not args.quiet:
                 print("\nDetailed Statistics:")
-                print(f"  Min similarity: {result.matrix.min():.4f}")
-                print(f"  Max similarity: {result.matrix.max():.4f}")
-                print(f"  Mean similarity: {result.matrix.mean():.4f}")
+                # Exclude diagonal when computing stats
+                off_diagonal = similarity_matrix[np.triu_indices(n, k=1)]
+                print(f"  Min similarity: {off_diagonal.min():.4f}")
+                print(f"  Max similarity: {off_diagonal.max():.4f}")
+                print(f"  Mean similarity: {off_diagonal.mean():.4f}")
 
         elif args.command == "compute-distances":
             # Validate output path
