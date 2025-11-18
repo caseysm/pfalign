@@ -655,10 +655,11 @@ PFalign is released under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## Acknowledgments
 
-Built on ideas from:
+We would like to acknowledge Jeanne Trinquier, Samantha Petti, and Sergey Ovchinnikov for their Soft Smith-Waterman implementation and the SoftAlign model weights.
+
+Built on:
 - ProteinMPNN for structural embeddings
-- Smith-Waterman and forward-backward algorithms
-- Classical phylogenetic methods (UPGMA, NJ, BioNJ)
+- SoftAlign for gap parameters and alignment approach
 
 ---
 
