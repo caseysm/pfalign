@@ -1,0 +1,9 @@
+{
+  "id": "1HBS",
+  "label": "hemoglobin_1HBS",
+  "expected_length": 146,
+  "source": "pdb/medium",
+  "hidden_dim": 64,
+  "num_layers": 3,
+  "k_neighbors": 30
+}

@@ -1,0 +1,9 @@
+{
+  "id": "1FBI",
+  "label": "immunoglobulin_1FBI",
+  "expected_length": 219,
+  "source": "pdb/large",
+  "hidden_dim": 64,
+  "num_layers": 3,
+  "k_neighbors": 30
+}

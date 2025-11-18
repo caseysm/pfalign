@@ -1,0 +1,9 @@
+{
+  "id": "2LYZ",
+  "label": "lysozyme_2LYZ",
+  "expected_length": 129,
+  "source": "pdb/medium",
+  "hidden_dim": 64,
+  "num_layers": 3,
+  "k_neighbors": 30
+}

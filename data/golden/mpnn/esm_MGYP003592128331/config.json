@@ -1,0 +1,9 @@
+{
+  "id": "MGYP003592128331",
+  "label": "esm_MGYP003592128331",
+  "expected_length": 57,
+  "source": "esm_atlas/singletons",
+  "hidden_dim": 64,
+  "num_layers": 3,
+  "k_neighbors": 30
+}

@@ -1,0 +1,7 @@
+{
+  "L1": 8,
+  "L2": 10,
+  "hidden_dim": 128,
+  "similarity_type": "dot_product",
+  "description": "Similarity golden data for 8\u00d710, 128D"
+}

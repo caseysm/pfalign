@@ -1,0 +1,9 @@
+{
+  "id": "1IGT",
+  "label": "immunoglobulin_1IGT",
+  "expected_length": 220,
+  "source": "pdb/large",
+  "hidden_dim": 64,
+  "num_layers": 3,
+  "k_neighbors": 30
+}

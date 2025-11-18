@@ -1,0 +1,7 @@
+{
+  "test_name": "single_sequence_1VII",
+  "protein": "1VII",
+  "length": 36,
+  "hidden_dim": 64,
+  "num_sequences": 1
+}

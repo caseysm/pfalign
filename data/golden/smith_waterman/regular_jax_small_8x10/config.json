@@ -1,0 +1,10 @@
+{
+  "name": "regular_jax_small_8x10",
+  "L1": 8,
+  "L2": 10,
+  "mode": "regular",
+  "temperature": 1.0,
+  "gap": -0.1,
+  "gap_open": -0.5,
+  "gap_extend": -0.1
+}

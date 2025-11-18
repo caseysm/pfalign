@@ -1,0 +1,9 @@
+{
+  "id": "P04406",
+  "label": "afdb_enzyme_P04406",
+  "expected_length": 330,
+  "source": "afdb/families/enzyme",
+  "hidden_dim": 64,
+  "num_layers": 3,
+  "k_neighbors": 30
+}

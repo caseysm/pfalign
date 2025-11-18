@@ -1,0 +1,7 @@
+{
+  "test_name": "single_sequence_1UBQ",
+  "protein": "1UBQ",
+  "length": 76,
+  "hidden_dim": 64,
+  "num_sequences": 1
+}

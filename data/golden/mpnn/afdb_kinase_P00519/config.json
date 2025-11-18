@@ -1,0 +1,9 @@
+{
+  "id": "P00519",
+  "label": "afdb_kinase_P00519",
+  "expected_length": 450,
+  "source": "afdb/families/kinase",
+  "hidden_dim": 64,
+  "num_layers": 3,
+  "k_neighbors": 30
+}

@@ -1,0 +1,9 @@
+{
+  "id": "P69905",
+  "label": "afdb_globin_P69905",
+  "expected_length": 142,
+  "source": "afdb/families/globin",
+  "hidden_dim": 64,
+  "num_layers": 3,
+  "k_neighbors": 30
+}

@@ -1,0 +1,7 @@
+{
+  "test_name": "single_sequence_1CRN",
+  "protein": "1CRN",
+  "length": 46,
+  "hidden_dim": 64,
+  "num_sequences": 1
+}

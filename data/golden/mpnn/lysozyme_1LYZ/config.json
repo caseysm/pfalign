@@ -1,0 +1,9 @@
+{
+  "id": "1LYZ",
+  "label": "lysozyme_1LYZ",
+  "expected_length": 129,
+  "source": "pdb/medium",
+  "hidden_dim": 64,
+  "num_layers": 3,
+  "k_neighbors": 30
+}

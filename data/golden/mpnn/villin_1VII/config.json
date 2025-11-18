@@ -1,0 +1,10 @@
+{
+  "pdb_id": "1VII",
+  "name": "villin",
+  "L": 36,
+  "hidden_dim": 64,
+  "num_layers": 3,
+  "k_neighbors": 30,
+  "weights_file": "../weights/mpnn_golden_weights.safetensors",
+  "description": "MPNN golden data for villin (1VII, 36 residues)"
+}

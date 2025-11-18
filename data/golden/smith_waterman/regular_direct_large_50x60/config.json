@@ -1,0 +1,10 @@
+{
+  "name": "regular_direct_large_50x60",
+  "L1": 50,
+  "L2": 60,
+  "mode": "regular",
+  "temperature": 1.0,
+  "gap": -0.1,
+  "gap_open": -0.5,
+  "gap_extend": -0.1
+}

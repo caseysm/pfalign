@@ -1,0 +1,17 @@
+{
+  "test_name": "merge_with_gaps_crambin_villin_mixed",
+  "merge_type": "with_gaps",
+  "profile1": {
+    "protein": "1CRN",
+    "length": 46,
+    "num_sequences": 1
+  },
+  "profile2": {
+    "protein": "1VII",
+    "length": 36,
+    "num_sequences": 1
+  },
+  "alignment_length": 52,
+  "alignment_type": "alternating_gaps",
+  "gap_columns": 22
+}

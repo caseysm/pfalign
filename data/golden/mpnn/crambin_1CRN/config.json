@@ -1,0 +1,10 @@
+{
+  "pdb_id": "1CRN",
+  "name": "crambin",
+  "L": 46,
+  "hidden_dim": 64,
+  "num_layers": 3,
+  "k_neighbors": 30,
+  "weights_file": "../weights/mpnn_golden_weights.safetensors",
+  "description": "MPNN golden data for crambin (1CRN, 46 residues)"
+}
