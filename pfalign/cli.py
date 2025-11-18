@@ -1366,7 +1366,7 @@ def main():
                         similarity_matrix[i, j] = 1.0  # Self-similarity is 1.0
                     else:
                         result = similarity(embeddings[i], embeddings[j])
-                        sim_value = result.similarity_matrix[0, 0]  # Extract scalar similarity
+                        sim_value = result.similarity[0, 0]  # Extract scalar similarity
                         similarity_matrix[i, j] = sim_value
                         similarity_matrix[j, i] = sim_value  # Symmetric matrix
 
