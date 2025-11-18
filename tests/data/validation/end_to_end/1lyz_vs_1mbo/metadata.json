@@ -1,0 +1,13 @@
+{
+  "case": "1lyz_vs_1mbo",
+  "pdb1": "fixtures/structures/lysozyme.pdb",
+  "pdb2": "integration/structures/medium/1MBO.pdb",
+  "sw_mode": "jax_affine_flexible",
+  "gap_extend": 0.194247,
+  "gap_open": -2.54418,
+  "temperature": 1.0,
+  "partition": 719.57776,
+  "alignment_score": 0.641105,
+  "l1": 230,
+  "l2": 487
+}

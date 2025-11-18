@@ -1,0 +1,129 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [main, codebase-reorganization]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1
+      with:
+        key: ${{ matrix.os }}-${{ matrix.python-version }}
+
+    - name: Install build dependencies
+      run: |
+        pip install --upgrade pip
+        pip install build meson meson-python ninja pybind11 numpy pytest patchelf setuptools-scm
+
+    - name: Build standalone CLI binary
+      run: |
+        meson setup build-release --buildtype=release -Dcli=true -Dbindings=disabled
+        meson compile -C build-release
+
+    - name: Test standalone CLI binary
+      run: |
+        build-release/cli/pfalign --help
+        echo "Standalone CLI binary built successfully ($(du -h build-release/cli/pfalign | cut -f1))"
+
+    - name: Build Python wheel (includes CLI + bindings)
+      run: |
+        rm -rf dist/  # Clean any previous builds
+        python -m build --wheel --no-isolation
+
+    - name: Install wheel
+      run: |
+        pip install dist/*.whl
+
+    - name: Test Python package import
+      run: |
+        cd /tmp  # Test outside source directory to use installed package
+        python -c "import pfalign; print(f'pfalign {pfalign.__version__} imported successfully')"
+        python -c "import pfalign; assert hasattr(pfalign, 'encode'), 'Missing encode function'"
+        python -c "import pfalign; assert hasattr(pfalign, 'pairwise'), 'Missing pairwise function'"
+
+    - name: Run C++ unit tests
+      run: |
+        # Reuse build-release from earlier step
+        meson test -C build-release --print-errorlogs
+
+    - name: Run Python tests (out-of-tree)
+      run: |
+        mkdir -p /tmp/pfalign_tests
+        cp -r pfalign/tests/* /tmp/pfalign_tests/
+
+        # Copy test data to match conftest.py expectations
+        if [ -d "tests/data" ]; then
+          mkdir -p /tmp/pfalign_tests/data
+          cp -r tests/data/* /tmp/pfalign_tests/data/
+        fi
+
+        cd /tmp
+        pytest pfalign_tests -v --tb=short
+
+    - uses: actions/upload-artifact@v4
+      if: matrix.python-version == '3.13' && matrix.os == 'ubuntu-latest'
+      with:
+        name: wheel-${{ matrix.os }}-py${{ matrix.python-version }}
+        path: dist/*.whl
+        retention-days: 7
+
+  test-profiling:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1
+      with:
+        key: ubuntu-profiling
+
+    - name: Install build dependencies
+      run: |
+        pip install --upgrade pip
+        pip install build meson meson-python ninja pybind11 numpy pytest patchelf setuptools-scm
+
+    - name: Build CLI with profiling enabled
+      run: |
+        meson setup build-release-profiling --buildtype=release -Dcli=true -Dbindings=disabled -Dprofiling=true
+        meson compile -C build-release-profiling
+
+    - name: Verify profiling is enabled
+      run: |
+        # Check that profiling option is enabled
+        grep -A1 '"name": "profiling"' build-release-profiling/meson-info/intro-buildoptions.json | grep '"value": true' || \
+          (echo "ERROR: Profiling not enabled in build" && exit 1)
+        echo "✓ Profiling enabled in build configuration"
+
+    - name: Test profiling-enabled binary
+      run: |
+        build-release-profiling/cli/pfalign --help
+        echo "✓ Profiling-enabled CLI binary built successfully ($(du -h build-release-profiling/cli/pfalign | cut -f1))"
+
+    - name: Run C++ tests with profiling
+      run: |
+        # Reuse build-release-profiling from earlier step (tests already built)
+        meson test -C build-release-profiling --print-errorlogs
+        echo "✓ C++ tests passed with profiling enabled"

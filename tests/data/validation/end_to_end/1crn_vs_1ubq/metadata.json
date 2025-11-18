@@ -1,0 +1,13 @@
+{
+  "case": "1crn_vs_1ubq",
+  "pdb1": "fixtures/structures/crambin.pdb",
+  "pdb2": "fixtures/structures/ubiquitin.pdb",
+  "sw_mode": "jax_affine_flexible",
+  "gap_extend": 0.194247,
+  "gap_open": -2.54418,
+  "temperature": 1.0,
+  "partition": 160.61925,
+  "alignment_score": 0.483599,
+  "l1": 46,
+  "l2": 134
+}

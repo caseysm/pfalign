@@ -1,0 +1,97 @@
+[build-system]
+requires = ["meson-python>=0.15.0", "pybind11>=2.11.0", "setuptools-scm>=8.0"]
+build-backend = "mesonpy"
+
+[project]
+name = "pfalign"
+dynamic = ["version"]
+description = "High-performance protein structure alignment with C++ backend"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Casey Mogilevsky", email = "casey.mogilevsky@pennmedicine.upenn.edu"},
+]
+keywords = ["protein", "alignment", "structure", "bioinformatics", "c++", "pybind11", "mpnn", "smith-waterman"]
+dependencies = [
+    "numpy>=1.20",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: C++",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+
+[project.urls]
+Homepage = "https://github.com/caseysm/protein-forge-align"
+Documentation = "https://github.com/caseysm/protein-forge-align/blob/main/README.md"
+Repository = "https://github.com/caseysm/protein-forge-align"
+Issues = "https://github.com/caseysm/protein-forge-align/issues"
+
+[project.scripts]
+pfalign = "pfalign.cli:main"
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "beautifulsoup4>=4.9.0",
+]
+
+[tool.meson-python.args]
+# Meson options for Python wheel build
+setup = ['-Dbindings=enabled', '-Dcli=false', '-Dtests=false']
+
+[tool.setuptools_scm]
+write_to = "pfalign/_version.py"
+version_scheme = "python-simplified-semver"
+local_scheme = "no-local-version"
+fallback_version = "0.0.1a0"
+
+[tool.pytest.ini_options]
+testpaths = ["pfalign/tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --strict-markers --tb=short"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["pfalign"]
+omit = [
+    "*/tests/*",
+    "*/_version.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.spin]
+package = "pfalign"
+
+[tool.spin.commands]
+"Build" = [
+  "spin.cmds.meson.build",
+]
+"Test" = [
+  "spin.cmds.meson.test",
+]

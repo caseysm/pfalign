@@ -1,0 +1,13 @@
+{
+  "case": "p00519_vs_p69905",
+  "pdb1": "integration/structures/predicted/P00519.pdb",
+  "pdb2": "integration/structures/predicted/P69905.pdb",
+  "sw_mode": "jax_affine_flexible",
+  "gap_extend": 0.194247,
+  "gap_open": -2.54418,
+  "temperature": 1.0,
+  "partition": 1504.11084,
+  "alignment_score": 0.99655,
+  "l1": 450,
+  "l2": 142
+}

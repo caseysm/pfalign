@@ -1,0 +1,13 @@
+{
+  "case": "1crn_self_direct_regular",
+  "pdb1": "fixtures/structures/crambin.pdb",
+  "pdb2": "fixtures/structures/crambin.pdb",
+  "sw_mode": "direct_regular",
+  "gap_extend": 0.194247,
+  "gap_open": -2.54418,
+  "temperature": 1.0,
+  "partition": 248.57373,
+  "alignment_score": 0.991812,
+  "l1": 46,
+  "l2": 46
+}

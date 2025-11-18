@@ -1,0 +1,13 @@
+{
+  "case": "1lyz_self",
+  "pdb1": "fixtures/structures/lysozyme.pdb",
+  "pdb2": "fixtures/structures/lysozyme.pdb",
+  "sw_mode": "jax_affine_flexible",
+  "gap_extend": 0.194247,
+  "gap_open": -2.54418,
+  "temperature": 1.0,
+  "partition": 1263.73279,
+  "alignment_score": 0.99875,
+  "l1": 230,
+  "l2": 230
+}

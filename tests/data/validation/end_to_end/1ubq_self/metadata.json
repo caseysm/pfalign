@@ -1,0 +1,13 @@
+{
+  "case": "1ubq_self",
+  "pdb1": "fixtures/structures/ubiquitin.pdb",
+  "pdb2": "fixtures/structures/ubiquitin.pdb",
+  "sw_mode": "jax_affine_flexible",
+  "gap_extend": 0.194247,
+  "gap_open": -2.54418,
+  "temperature": 1.0,
+  "partition": 646.10730,
+  "alignment_score": 0.994035,
+  "l1": 134,
+  "l2": 134
+}

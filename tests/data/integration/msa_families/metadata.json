@@ -1,0 +1,423 @@
+{
+  "description": "Curated PDB structures for align_v2 testing and validation",
+  "total_structures": 16,
+  "msa_capable_families": 3,
+  "size_categories": {
+    "small": "< 100 residues",
+    "medium": "100-200 residues",
+    "large": "> 200 residues"
+  },
+  "structures": {
+    "1CRN": {
+      "name": "Crambin",
+      "organism": "Crambe abyssinica",
+      "residues": 46,
+      "resolution": 1.5,
+      "size_category": "small",
+      "family": null,
+      "msa_family": null,
+      "use_cases": [
+        "primary_validation",
+        "mpnn_reference",
+        "jax_parity",
+        "self_match_baseline"
+      ],
+      "notes": "Primary test structure - small, high-quality, well-studied"
+    },
+    "1VII": {
+      "name": "Villin Headpiece",
+      "organism": "Gallus gallus",
+      "residues": 35,
+      "resolution": null,
+      "size_category": "small",
+      "family": null,
+      "msa_family": null,
+      "use_cases": [
+        "fast_folding_protein",
+        "small_domain_test",
+        "minimum_size_edge_case"
+      ],
+      "notes": "Smallest autonomous folding domain, NMR structure"
+    },
+    "1UBQ": {
+      "name": "Ubiquitin",
+      "organism": "Homo sapiens",
+      "residues": 76,
+      "resolution": 1.8,
+      "size_category": "small",
+      "family": null,
+      "msa_family": null,
+      "use_cases": [
+        "secondary_validation",
+        "beta_sheet_structure",
+        "different_fold_comparison"
+      ],
+      "notes": "Well-characterized protein, mix of alpha/beta structure"
+    },
+    "1IGY": {
+      "name": "Immunoglobulin Light Chain",
+      "organism": "Homo sapiens",
+      "residues": 107,
+      "resolution": 2.0,
+      "size_category": "medium",
+      "family": "immunoglobulin",
+      "msa_family": "immunoglobulin",
+      "use_cases": [
+        "family_msa_test",
+        "beta_sandwich",
+        "single_domain_ig"
+      ],
+      "notes": "Single Ig domain, pairs with 1IGT and 1FBI for MSA testing"
+    },
+    "2LYZ": {
+      "name": "Lysozyme (Chicken)",
+      "organism": "Gallus gallus",
+      "residues": 129,
+      "resolution": 2.0,
+      "size_category": "medium",
+      "family": "lysozyme",
+      "msa_family": "lysozyme",
+      "use_cases": [
+        "enzyme_structure",
+        "disulfide_bonds",
+        "family_msa_test"
+      ],
+      "notes": "Classic chicken lysozyme with multiple disulfide bonds"
+    },
+    "1LYZ": {
+      "name": "Lysozyme (Hen Egg White)",
+      "organism": "Gallus gallus",
+      "residues": 129,
+      "resolution": 1.6,
+      "size_category": "medium",
+      "family": "lysozyme",
+      "msa_family": "lysozyme",
+      "use_cases": [
+        "family_msa_test",
+        "enzyme_catalysis",
+        "high_resolution"
+      ],
+      "notes": "High-resolution hen egg white lysozyme, very similar to 2LYZ"
+    },
+    "1REX": {
+      "name": "T4 Lysozyme",
+      "organism": "Bacteriophage T4",
+      "residues": 164,
+      "resolution": 1.7,
+      "size_category": "medium",
+      "family": "lysozyme",
+      "msa_family": "lysozyme",
+      "use_cases": [
+        "family_msa_test",
+        "remote_homology",
+        "bacteriophage_protein"
+      ],
+      "notes": "T4 phage lysozyme - distant homolog, tests remote family detection"
+    },
+    "1HBS": {
+      "name": "Hemoglobin Beta Subunit",
+      "organism": "Homo sapiens",
+      "residues": 146,
+      "resolution": 2.1,
+      "size_category": "medium",
+      "family": "globin",
+      "msa_family": "globin",
+      "use_cases": [
+        "family_msa_test",
+        "all_alpha_structure",
+        "human_protein"
+      ],
+      "notes": "Human hemoglobin β - globin family MSA with 1MBO, 1MBA, 1MYT, 2NRL"
+    },
+    "1MBA": {
+      "name": "Myoglobin (Mutant)",
+      "organism": "Physeter catodon",
+      "residues": 153,
+      "resolution": 2.0,
+      "size_category": "medium",
+      "family": "globin",
+      "msa_family": "globin",
+      "use_cases": [
+        "family_msa_test",
+        "close_homology",
+        "myoglobin_variant"
+      ],
+      "notes": "Sperm whale myoglobin mutant - 95% identical to 1MBO"
+    },
+    "1MBO": {
+      "name": "Myoglobin",
+      "organism": "Physeter catodon",
+      "residues": 154,
+      "resolution": 1.0,
+      "size_category": "medium",
+      "family": "globin",
+      "msa_family": "globin",
+      "use_cases": [
+        "family_msa_test",
+        "high_resolution_structure",
+        "ultra_high_quality"
+      ],
+      "notes": "1.0Å resolution - highest quality globin structure"
+    },
+    "1MYT": {
+      "name": "Myoglobin (Yellowfin Tuna)",
+      "organism": "Thunnus albacares",
+      "residues": 146,
+      "resolution": 2.0,
+      "size_category": "medium",
+      "family": "globin",
+      "msa_family": "globin",
+      "use_cases": [
+        "family_msa_test",
+        "fish_protein",
+        "evolutionary_diversity"
+      ],
+      "notes": "Fish myoglobin - adds aquatic vertebrate to globin family"
+    },
+    "2NRL": {
+      "name": "Leghemoglobin",
+      "organism": "Lupinus luteus",
+      "residues": 153,
+      "resolution": 2.0,
+      "size_category": "medium",
+      "family": "globin",
+      "msa_family": "globin",
+      "use_cases": [
+        "family_msa_test",
+        "remote_homology",
+        "plant_protein",
+        "cross_kingdom"
+      ],
+      "notes": "Plant leghemoglobin - distant globin (~25% identity), tests remote MSA"
+    },
+    "1RNH": {
+      "name": "Ribonuclease H",
+      "organism": "Escherichia coli",
+      "residues": 155,
+      "resolution": 1.8,
+      "size_category": "medium",
+      "family": null,
+      "msa_family": null,
+      "use_cases": [
+        "alpha_beta_structure",
+        "nuclease_enzyme",
+        "different_fold"
+      ],
+      "notes": "Mixed alpha/beta fold, distinct from all other structures"
+    },
+    "1IGT": {
+      "name": "Immunoglobulin Fab Fragment",
+      "organism": "Mus musculus",
+      "residues": 220,
+      "resolution": 2.8,
+      "size_category": "large",
+      "family": "immunoglobulin",
+      "msa_family": "immunoglobulin",
+      "use_cases": [
+        "large_structure_test",
+        "multi_domain_protein",
+        "family_msa_test"
+      ],
+      "notes": "Two-domain Ig Fab fragment (VL + CL domains)"
+    },
+    "1FBI": {
+      "name": "Immunoglobulin Fab Fragment (Human)",
+      "organism": "Homo sapiens",
+      "residues": 219,
+      "resolution": 2.0,
+      "size_category": "large",
+      "family": "immunoglobulin",
+      "msa_family": "immunoglobulin",
+      "use_cases": [
+        "family_msa_test",
+        "multi_domain_alignment",
+        "human_antibody"
+      ],
+      "notes": "Human Fab fragment - enables 3-member Ig family MSA"
+    },
+    "4CHA": {
+      "name": "Chymotrypsin",
+      "organism": "Bos taurus",
+      "residues": 241,
+      "resolution": 1.68,
+      "size_category": "large",
+      "family": "serine_protease",
+      "msa_family": null,
+      "use_cases": [
+        "large_protein_test",
+        "serine_protease",
+        "catalytic_triad"
+      ],
+      "notes": "Serine protease - singleton now, future family expansion possible"
+    }
+  },
+  "protein_families": {
+    "globin": {
+      "members": ["1HBS", "1MBA", "1MBO", "1MYT", "2NRL"],
+      "count": 5,
+      "description": "Oxygen-binding proteins across kingdoms",
+      "fold": "all-alpha",
+      "sequence_identity_range": "25-95%",
+      "length_range": "146-154 residues",
+      "expected_msa_ecs": "> 0.30",
+      "phylogeny": {
+        "mammals": ["1MBO", "1MBA", "1HBS"],
+        "fish": ["1MYT"],
+        "plants": ["2NRL"]
+      },
+      "notes": "Excellent MSA test family - high quality, known phylogeny, diverse sources"
+    },
+    "immunoglobulin": {
+      "members": ["1IGT", "1IGY", "1FBI"],
+      "count": 3,
+      "description": "Antibody immunoglobulin domains",
+      "fold": "beta-sandwich",
+      "sequence_identity_range": "30-50%",
+      "length_range": "107-220 residues",
+      "expected_msa_ecs": "> 0.20",
+      "domain_structure": {
+        "single_domain": ["1IGY"],
+        "two_domain": ["1IGT", "1FBI"]
+      },
+      "notes": "Tests multi-domain alignment and beta-sheet MSA"
+    },
+    "lysozyme": {
+      "members": ["2LYZ", "1LYZ", "1REX"],
+      "count": 3,
+      "description": "Lysozyme enzymes from diverse organisms",
+      "fold": "alpha+beta",
+      "sequence_identity_range": "25-99%",
+      "length_range": "129-164 residues",
+      "expected_msa_ecs": "> 0.25",
+      "organisms": {
+        "chicken": ["2LYZ", "1LYZ"],
+        "bacteriophage": ["1REX"]
+      },
+      "notes": "Small enzyme family, tests cross-kingdom MSA (eukaryote vs phage)"
+    }
+  },
+  "singletons": {
+    "count": 7,
+    "members": ["1CRN", "1VII", "1UBQ", "1RNH", "4CHA"],
+    "purpose": "Different-fold comparisons, edge case testing, structural diversity"
+  },
+  "test_pairs": {
+    "self_match": {
+      "description": "Perfect self-alignment tests",
+      "pairs": [
+        ["1CRN", "1CRN"],
+        ["1UBQ", "1UBQ"],
+        ["1MBO", "1MBO"]
+      ],
+      "expected_lddt": 1.0,
+      "expected_dali_z": "> 8.0"
+    },
+    "homologous": {
+      "description": "Related proteins within families",
+      "pairs": [
+        ["1MBO", "1HBS"],
+        ["1MBO", "1MYT"],
+        ["1MBO", "2NRL"],
+        ["1IGT", "1IGY"],
+        ["1IGT", "1FBI"],
+        ["2LYZ", "1LYZ"],
+        ["2LYZ", "1REX"]
+      ],
+      "expected_lddt": "> 0.4",
+      "expected_dali_z": "> 4.0"
+    },
+    "remote_homologs": {
+      "description": "Distant family members (< 30% identity)",
+      "pairs": [
+        ["1MBO", "2NRL"],
+        ["2LYZ", "1REX"]
+      ],
+      "expected_lddt": "> 0.3",
+      "expected_dali_z": "> 3.0",
+      "notes": "Tests remote homology detection in MSA"
+    },
+    "different_folds": {
+      "description": "Unrelated proteins, low similarity",
+      "pairs": [
+        ["1CRN", "1UBQ"],
+        ["1CRN", "1RNH"],
+        ["1UBQ", "2LYZ"],
+        ["1MBO", "1IGT"],
+        ["2LYZ", "4CHA"]
+      ],
+      "expected_lddt": "< 0.4",
+      "expected_dali_z": "< 2.0"
+    }
+  },
+  "msa_test_configurations": {
+    "globin_5member": {
+      "family": "globin",
+      "members": ["1MBO", "1MBA", "1HBS", "1MYT", "2NRL"],
+      "expected_results": {
+        "ecs": "> 0.30",
+        "aligned_length": "140-150 residues",
+        "quality": "excellent"
+      },
+      "guide_tree_tests": ["UPGMA", "NJ", "BIONJ", "MST"],
+      "notes": "Primary MSA test family - largest, most diverse"
+    },
+    "globin_vertebrate": {
+      "family": "globin",
+      "members": ["1MBO", "1HBS", "1MYT"],
+      "expected_results": {
+        "ecs": "> 0.40",
+        "aligned_length": "145-150 residues",
+        "quality": "excellent"
+      },
+      "notes": "Vertebrate-only globins - higher sequence identity"
+    },
+    "immunoglobulin_3member": {
+      "family": "immunoglobulin",
+      "members": ["1IGT", "1IGY", "1FBI"],
+      "expected_results": {
+        "ecs": "> 0.20",
+        "aligned_length": "100-110 residues (domain-level)",
+        "quality": "good"
+      },
+      "guide_tree_tests": ["UPGMA", "NJ", "BIONJ", "MST"],
+      "notes": "Multi-domain alignment - tests domain boundary handling"
+    },
+    "lysozyme_3member": {
+      "family": "lysozyme",
+      "members": ["2LYZ", "1LYZ", "1REX"],
+      "expected_results": {
+        "ecs": "> 0.25",
+        "aligned_length": "125-135 residues",
+        "quality": "good"
+      },
+      "guide_tree_tests": ["UPGMA", "NJ", "BIONJ", "MST"],
+      "notes": "Cross-kingdom enzyme family - chicken vs bacteriophage"
+    }
+  },
+  "version": "2.0",
+  "created": "2025-11-03",
+  "last_updated": "2025-11-03",
+  "changelog": {
+    "2.0": {
+      "date": "2025-11-03",
+      "changes": [
+        "Added 6 new structures (2NRL, 1MYT, 1FBI, 1LYZ, 1REX, 4CHA)",
+        "Increased from 10 to 16 total structures",
+        "Expanded from 2 to 3 MSA-capable families",
+        "Globin family expanded from 3 to 5 members",
+        "Immunoglobulin family expanded from 2 to 3 members (now MSA-capable)",
+        "Added new lysozyme family (3 members)",
+        "Added MSA test configurations section",
+        "Added remote homolog test pairs"
+      ]
+    },
+    "1.0": {
+      "date": "2025-11-03",
+      "changes": [
+        "Initial metadata for 10 PDB structures",
+        "2 protein families (globin, immunoglobulin)",
+        "Basic test pair definitions"
+      ]
+    }
+  }
+}

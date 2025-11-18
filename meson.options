@@ -1,0 +1,33 @@
+# PFalign - Build configuration options
+
+option('bindings',
+  type: 'feature',
+  value: 'auto',
+  description: 'Build Python bindings (meson-python auto-enables)'
+)
+
+option('cli',
+  type: 'boolean',
+  value: true,
+  description: 'Build standalone CLI binary'
+)
+
+option('tests',
+  type: 'boolean',
+  value: true,
+  description: 'Build C++ test suite'
+)
+
+option('profiling',
+  type: 'boolean',
+  value: false,
+  description: 'Enable profiling instrumentation (sets ENABLE_PROFILING=1)'
+)
+
+# Future backend options (not implemented in v2.0)
+option('compute_backend',
+  type: 'combo',
+  choices: ['scalar', 'sse2', 'avx2', 'avx512', 'neon', 'cuda', 'metal'],
+  value: 'scalar',
+  description: 'Computational backend (only scalar supported in v2.0)'
+)

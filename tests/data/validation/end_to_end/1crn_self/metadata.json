@@ -1,0 +1,13 @@
+{
+  "case": "1crn_self",
+  "pdb1": "fixtures/structures/crambin.pdb",
+  "pdb2": "fixtures/structures/crambin.pdb",
+  "sw_mode": "jax_affine_flexible",
+  "gap_extend": 0.194247,
+  "gap_open": -2.54418,
+  "temperature": 1.0,
+  "partition": 242.93697,
+  "alignment_score": 0.999897,
+  "l1": 46,
+  "l2": 46
+}

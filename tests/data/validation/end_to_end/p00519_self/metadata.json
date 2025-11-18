@@ -1,0 +1,13 @@
+{
+  "case": "p00519_self",
+  "pdb1": "integration/structures/predicted/P00519.pdb",
+  "pdb2": "integration/structures/predicted/P00519.pdb",
+  "sw_mode": "jax_affine_flexible",
+  "gap_extend": 0.194247,
+  "gap_open": -2.54418,
+  "temperature": 1.0,
+  "partition": 4353.93262,
+  "alignment_score": 0.99999,
+  "l1": 450,
+  "l2": 450
+}

@@ -1,0 +1,13 @@
+{
+  "case": "mgyp003592128331_vs_mgyp002802792805",
+  "pdb1": "integration/structures/predicted/MGYP003592128331.pdb",
+  "pdb2": "integration/structures/predicted/MGYP002802792805.pdb",
+  "sw_mode": "jax_affine_flexible",
+  "gap_extend": 0.194247,
+  "gap_open": -2.54418,
+  "temperature": 1.0,
+  "partition": 546.60767,
+  "alignment_score": 0.995554,
+  "l1": 57,
+  "l2": 60
+}
