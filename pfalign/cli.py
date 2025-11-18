@@ -411,19 +411,18 @@ def main():
         help="Compute distance matrix from embeddings for phylogenetic tree building",
     )
 
-    # Create mutually exclusive group for input methods
-    distances_input_group = distances_parser.add_mutually_exclusive_group(required=False)
-    distances_input_group.add_argument(
+    # Input arguments (use one of: positional args, --input-list, or --input-dir)
+    distances_parser.add_argument(
         "inputs",
         nargs="*",
         help="Input embeddings (.npy files), OR single directory, OR single .txt file with paths",
     )
-    distances_input_group.add_argument(
+    distances_parser.add_argument(
         "--input-list",
         type=existing_file_type(extensions=('.txt',)),
         help="File containing list of embedding paths (one per line)",
     )
-    distances_input_group.add_argument(
+    distances_parser.add_argument(
         "--input-dir",
         type=str,
         help="Directory containing .npy embedding files",
@@ -1166,19 +1165,18 @@ def main():
         help="Batch encode multiple structures",
     )
 
-    # Create mutually exclusive group for input methods
-    batch_encode_input_group = batch_encode_parser.add_mutually_exclusive_group(required=False)
-    batch_encode_input_group.add_argument(
+    # Input arguments (use one of: positional args, --input-list, or --input-dir)
+    batch_encode_parser.add_argument(
         "inputs",
         nargs="*",
         help="Input structures (.pdb/.cif files), OR single directory, OR single .txt file with paths",
     )
-    batch_encode_input_group.add_argument(
+    batch_encode_parser.add_argument(
         "--input-list",
         type=existing_file_type(extensions=('.txt',)),
         help="File containing list of structure paths (one per line)",
     )
-    batch_encode_input_group.add_argument(
+    batch_encode_parser.add_argument(
         "--input-dir",
         type=str,
         help="Directory containing structure files",
