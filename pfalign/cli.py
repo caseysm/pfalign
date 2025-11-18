@@ -386,21 +386,42 @@ def main():
         "similarity",
         help="Compute similarity matrix between embeddings",
     )
+
+    # Input arguments (use one of: positional args, --input-list, or --input-dir)
     similarity_parser.add_argument(
-        "embeddings1",
-        type=existing_file_type(extensions=('.npy',)),
-        help="First embeddings (.npy file)",
+        "inputs",
+        nargs="*",
+        help="Input embeddings (.npy files), OR single directory, OR single .txt file with paths",
     )
     similarity_parser.add_argument(
-        "embeddings2",
-        type=existing_file_type(extensions=('.npy',)),
-        help="Second embeddings (.npy file)",
+        "--input-list",
+        type=existing_file_type(extensions=('.txt',)),
+        help="File containing list of embedding paths (one per line)",
     )
+    similarity_parser.add_argument(
+        "--input-dir",
+        type=str,
+        help="Directory containing .npy embedding files",
+    )
+
     similarity_parser.add_argument(
         "-o", "--output",
         type=output_path_type,
         required=True,
         help="Output .npy file for similarity matrix",
+    )
+    similarity_parser.add_argument(
+        "--method",
+        type=str,
+        default="ecs",
+        choices=["ecs", "cosine"],
+        help="Similarity method (default: ecs)",
+    )
+    similarity_parser.add_argument(
+        "--temperature",
+        type=float,
+        default=3.0,
+        help="Temperature for ECS (default: 3.0)",
     )
 
     # ========================================================================
@@ -1232,7 +1253,7 @@ def main():
                 k_neighbors=args.k_neighbors,
             )
             np.save(args.output, result.embeddings)
-            print_info(f"[OK] Encoded {result.length} residues to {args.output}", args.quiet)
+            print_info(f"[OK] Encoded {result.length()} residues to {args.output}", args.quiet)
 
         elif args.command == "pairwise":
             # Validate inputs
@@ -1256,7 +1277,7 @@ def main():
             result.save(args.output, format=args.format)
 
             print_info(f"[OK] Pairwise alignment complete", args.quiet)
-            print_info(f"  Score: {result.score:.4f}", args.quiet)
+            print_info(f"  Score: {result.score():.4f}", args.quiet)
             print_info(f"  Output: {args.output}", args.quiet)
 
             # Show detailed statistics if --stats flag is used
@@ -1318,23 +1339,36 @@ def main():
                 print(result.summary())
 
         elif args.command == "similarity":
-            # Validate inputs
-            validate_input_file(args.embeddings1, "Embeddings 1")
-            validate_input_file(args.embeddings2, "Embeddings 2")
+            # Validate output path
             validate_output_path(args.output)
 
-            emb1 = np.load(args.embeddings1)
-            emb2 = np.load(args.embeddings2)
-            result = similarity(emb1, emb2)
-            np.save(args.output, result.similarity_matrix)
+            # Parse inputs: could be list of files, directory, or input-list file
+            inputs = None
+            if args.input_list:
+                with open(args.input_list) as f:
+                    inputs = [line.strip() for line in f if line.strip()]
+            elif args.input_dir:
+                inputs = [os.path.join(args.input_dir, f) for f in os.listdir(args.input_dir) if f.endswith('.npy')]
+            elif args.inputs:
+                inputs = args.inputs
+            else:
+                raise ValueError("Must provide inputs via positional arguments, --input-list, or --input-dir")
+
+            # Load embeddings
+            embeddings = [np.load(inp) for inp in inputs]
+
+            # Compute similarity matrix
+            result = similarity(embeddings, method=args.method, temperature=args.temperature)
+            np.save(args.output, result.matrix)
             print_info(f"[OK] Similarity matrix saved to {args.output}", args.quiet)
-            print_info(f"  Shape: {result.similarity_matrix.shape}", args.quiet)
+            print_info(f"  Shape: {result.matrix.shape}", args.quiet)
+            print_info(f"  Method: {args.method}", args.quiet)
 
             if args.stats and not args.quiet:
                 print("\nDetailed Statistics:")
-                print(f"  Min similarity: {result.similarity_matrix.min():.4f}")
-                print(f"  Max similarity: {result.similarity_matrix.max():.4f}")
-                print(f"  Mean similarity: {result.similarity_matrix.mean():.4f}")
+                print(f"  Min similarity: {result.matrix.min():.4f}")
+                print(f"  Max similarity: {result.matrix.max():.4f}")
+                print(f"  Mean similarity: {result.matrix.mean():.4f}")
 
         elif args.command == "compute-distances":
             # Validate output path
