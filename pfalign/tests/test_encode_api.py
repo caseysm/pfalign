@@ -9,7 +9,7 @@ def test_encode_and_similarity(sample_pdbs):
     assert isinstance(embedding, pfalign.EmbeddingResult)
     arr = np.asarray(embedding)
     assert arr.ndim == 2
-    assert arr.shape[0] == embedding.sequence_length()
+    assert arr.shape[0] == embedding.sequence_length
 
     sim = pfalign.similarity(embedding, embedding)
     assert isinstance(sim, pfalign.SimilarityResult)

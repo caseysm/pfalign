@@ -66,14 +66,14 @@ class Tree:
 
         # Generate default labels if not provided
         if labels is None:
-            n = guide_tree.num_sequences()
+            n = guide_tree.num_sequences
             labels = [f"seq{i}" for i in range(n)]
 
         # Validate labels count
-        if len(labels) != guide_tree.num_sequences():
+        if len(labels) != guide_tree.num_sequences:
             raise ValueError(
                 f"Number of labels ({len(labels)}) must match "
-                f"number of sequences ({guide_tree.num_sequences()})"
+                f"number of sequences ({guide_tree.num_sequences})"
             )
 
         self._labels = labels
@@ -152,7 +152,7 @@ class Tree:
         """Get number of leaf sequences in tree."""
         if self._guide_tree is None:
             return 0
-        return self._guide_tree.num_sequences()
+        return self._guide_tree.num_sequences
 
     @property
     def num_nodes(self) -> int:

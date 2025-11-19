@@ -93,6 +93,7 @@ void compute_distance_matrix_alignment(
     const pfalign::smith_waterman::SWConfig& sw_config,
     pfalign::memory::GrowableArena* scratch_arena,
     float* distances,  // [N × N] output
+    size_t num_threads = 0,  // 0 = auto-detect
     std::function<void(int, int)> progress_callback = nullptr  // (current, total) callback
 );
 

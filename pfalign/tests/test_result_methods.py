@@ -16,7 +16,7 @@ def test_embedding_result_helpers(sample_pdbs):
     norm = emb.normalize()
     assert np.allclose(np.linalg.norm(np.asarray(norm), axis=1), 1.0, atol=1e-4)
     subset = emb.get_subset([0, 2, 4])
-    assert subset.sequence_length() == 3
+    assert subset.sequence_length == 3
 
 
 def test_similarity_result_utilities(random_embeddings):
@@ -34,6 +34,6 @@ def test_similarity_result_utilities(random_embeddings):
 def test_msa_result_access(msa_structure_paths):
     result = pfalign.msa(msa_structure_paths[:3], method="upgma", k_neighbors=6)
     seq = result.get_sequence(0)
-    assert len(seq) == result.alignment_length()
+    assert len(seq) == result.alignment_length
     column = result.get_column(0)
-    assert len(column) == result.num_sequences()
+    assert len(column) == result.num_sequences
