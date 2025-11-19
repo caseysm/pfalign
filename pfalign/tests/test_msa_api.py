@@ -16,10 +16,10 @@ def test_msa_embeddings(random_embeddings):
         arena_size_mb=150,
     )
     assert isinstance(result, pfalign.MSAResult)
-    assert result.num_sequences() == 3
-    assert result.alignment_length() > 0
+    assert result.num_sequences == 3
+    assert result.alignment_length > 0
     arr = result.to_array()
-    assert arr.shape == (result.alignment_length(), result.num_sequences())
+    assert arr.shape == (result.alignment_length, result.num_sequences)
 
 
 @pytest.mark.slow
@@ -34,7 +34,7 @@ def test_msa_structures(msa_structure_paths):
         arena_size_mb=256,
     )
     assert isinstance(result, pfalign.MSAResult)
-    assert result.num_sequences() == len(msa_structure_paths)
+    assert result.num_sequences == len(msa_structure_paths)
     assert len(result.sequences()) == len(msa_structure_paths)
     consensus = result.get_consensus(0.4)
-    assert len(consensus) == result.alignment_length()
+    assert len(consensus) == result.alignment_length

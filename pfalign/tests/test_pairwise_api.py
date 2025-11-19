@@ -9,8 +9,8 @@ def test_pairwise_embeddings(random_embeddings):
     emb1, emb2 = random_embeddings
     result = pfalign.pairwise(emb1, emb2)  # Uses embedded gap params
     assert isinstance(result, pfalign.PairwiseResult)
-    assert result.L1() == emb1.shape[0]
-    assert result.L2() == emb2.shape[0]
+    assert result.L1 == emb1.shape[0]
+    assert result.L2 == emb2.shape[0]
     posteriors = result.posteriors
     assert posteriors.shape == (emb1.shape[0], emb2.shape[0])
     assert np.isfinite(posteriors).all()
@@ -29,8 +29,8 @@ def test_pairwise_structures(sample_pdbs):
         # Gap parameters loaded from embedded weights
     )
     assert isinstance(result, pfalign.PairwiseResult)
-    assert result.L1() > 0 and result.L2() > 0
-    assert result.posteriors.shape == (result.L1(), result.L2())
+    assert result.L1 > 0 and result.L2 > 0
+    assert result.posteriors.shape == (result.L1, result.L2)
     assert result.compute_coverage() > 0.0
 
 
@@ -54,5 +54,5 @@ def test_pairwise_custom_gap_params(random_embeddings):
     assert isinstance(result_custom, pfalign.PairwiseResult)
 
     # Results should differ since parameters differ
-    assert result_default.score() != result_custom.score()
+    assert result_default.score != result_custom.score
     assert not np.allclose(result_default.posteriors, result_custom.posteriors)

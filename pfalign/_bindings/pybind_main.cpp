@@ -582,6 +582,7 @@ MSAResult MsaFromStructures(const std::vector<std::string>& paths,
         sw_cfg,
         &scratch,
         distances.data(),
+        requested_threads,  // Pass user's thread count
         [&](int current, int total) {
             if (!progress_callback.is_none()) {
                 progress_callback(current, total, "Computing distances");
@@ -697,11 +698,13 @@ MSAResult MsaFromEmbeddings(py::sequence embeddings,
     std::vector<float> distances(static_cast<size_t>(N) * N, 0.0f);
 
     // Phase 3: Computing distances with progress callback
+    const size_t requested_threads = threads > 0 ? static_cast<size_t>(threads) : 0;
     pfalign::msa::compute_distance_matrix_alignment(
         cache,
         sw_cfg,
         &scratch,
         distances.data(),
+        requested_threads,  // Pass user's thread count
         [&](int current, int total) {
             if (!progress_callback.is_none()) {
                 progress_callback(current, total, "Computing distances");
@@ -2458,10 +2461,15 @@ Example:
 
     // ----------------------- Result Classes -----------------------
     py::class_<PairwiseResult>(m, "PairwiseResult")
-        .def("L1", &PairwiseResult::L1)
-        .def("L2", &PairwiseResult::L2)
-        .def("score", &PairwiseResult::score)
-        .def("partition", &PairwiseResult::partition)
+        .def_property_readonly("L1", &PairwiseResult::L1)
+        .def_property_readonly("L2", &PairwiseResult::L2)
+        .def_property_readonly("score", &PairwiseResult::score)
+        .def_property_readonly("partition", &PairwiseResult::partition)
+        .def_property_readonly("shape", [](const PairwiseResult& self) {
+            return py::make_tuple(self.L1(), self.L2());
+        }, "Shape of alignment (L1, L2) - NumPy-style")
+        .def_property_readonly("coverage", &PairwiseResult::compute_coverage,
+            "Alignment coverage (convenience property)")
         .def("alignment", &PairwiseResult::alignment, py::return_value_policy::reference_internal)
         .def_property_readonly("posteriors", [](py::object self_py) {
             auto& self = self_py.cast<PairwiseResult&>();
@@ -2595,12 +2603,35 @@ Example:
                << (stats.gap_percentage * 100.0) << "%)\n";
             return ss.str();
         },
-        "Get formatted alignment summary");
+        "Get formatted alignment summary")
+        .def("__repr__", [](const PairwiseResult& self) {
+            std::ostringstream ss;
+            ss << "<PairwiseResult: shape=(" << self.L1() << ", " << self.L2()
+               << "), score=" << std::fixed << std::setprecision(2) << self.score() << ">";
+            return ss.str();
+        })
+        .def("__str__", [](const PairwiseResult& self) {
+            std::ostringstream ss;
+            ss << std::fixed << std::setprecision(4);
+            ss << "Pairwise Alignment Result\n"
+               << "  Shape: (" << self.L1() << ", " << self.L2() << ")\n"
+               << "  Score: " << self.score() << "\n"
+               << "  Coverage: " << self.compute_coverage();
+            return ss.str();
+        });
 
     py::class_<MSAResult>(m, "MSAResult")
-        .def("num_sequences", &MSAResult::num_sequences)
-        .def("alignment_length", &MSAResult::alignment_length)
-        .def("ecs_score", &MSAResult::ecs_score)
+        .def_property_readonly("num_sequences", &MSAResult::num_sequences)
+        .def_property_readonly("alignment_length", &MSAResult::alignment_length)
+        .def_property_readonly("ecs_score", &MSAResult::ecs_score)
+        .def_property_readonly("conservation", [](const MSAResult& self) {
+            auto arr = py::array_t<float>(self.alignment_length());
+            self.compute_conservation(arr.mutable_data());
+            return arr;
+        }, "Per-column conservation scores (convenience property)")
+        .def_property_readonly("consensus", [](const MSAResult& self) {
+            return self.get_consensus(0.5f);
+        }, "Consensus sequence with threshold=0.5 (convenience property)")
         .def("sequences", &MSAResult::sequences, py::return_value_policy::reference_internal)
         .def("identifiers", &MSAResult::identifiers, py::return_value_policy::reference_internal)
         .def("write_fasta", &MSAResult::write_fasta)
@@ -2664,15 +2695,7 @@ Example:
         },
         "Get sequence by index")
         .def("__len__", &MSAResult::num_sequences, "Get number of sequences")
-        .def("consensus", &MSAResult::get_consensus,
-             py::arg("threshold") = 0.5f,
-             "Get consensus sequence")
-        .def("conservation", [](const MSAResult& self) {
-            auto arr = py::array_t<float>(self.alignment_length());
-            self.compute_conservation(arr.mutable_data());
-            return arr;
-        },
-        "Get per-column conservation scores")
+        // Note: "consensus" and "conservation" already defined as properties above (lines 2629, 2624)
         .def("statistics", [](const MSAResult& self) {
             py::dict stats;
 
@@ -2807,11 +2830,27 @@ Example:
 
             return ss.str();
         },
-        "Get formatted MSA summary");
+        "Get formatted MSA summary")
+        .def("__repr__", [](const MSAResult& self) {
+            std::ostringstream ss;
+            ss << "<MSAResult: sequences=" << self.num_sequences()
+               << ", length=" << self.alignment_length()
+               << ", ecs=" << std::fixed << std::setprecision(2) << self.ecs_score() << ">";
+            return ss.str();
+        })
+        .def("__str__", [](const MSAResult& self) {
+            std::ostringstream ss;
+            ss << std::fixed << std::setprecision(4);
+            ss << "MSA Result\n"
+               << "  Sequences: " << self.num_sequences() << "\n"
+               << "  Length: " << self.alignment_length() << "\n"
+               << "  ECS Score: " << self.ecs_score();
+            return ss.str();
+        });
 
     py::class_<EmbeddingResult>(m, "EmbeddingResult")
-        .def("sequence_length", &EmbeddingResult::sequence_length)
-        .def("hidden_dim", &EmbeddingResult::hidden_dim)
+        .def_property_readonly("sequence_length", &EmbeddingResult::sequence_length)
+        .def_property_readonly("hidden_dim", &EmbeddingResult::hidden_dim)
         .def_property_readonly("embeddings", [](py::object self_py) {
             auto& self = self_py.cast<EmbeddingResult&>();
             return py::array_t<float>(
@@ -2833,11 +2872,17 @@ Example:
             return arr;
         })
         .def("get_subset", &EmbeddingResult::get_subset, py::arg("indices"))
-        .def("normalize", &EmbeddingResult::normalize);
+        .def("normalize", &EmbeddingResult::normalize)
+        .def("__repr__", [](const EmbeddingResult& self) {
+            std::ostringstream ss;
+            ss << "<EmbeddingResult: shape=(" << self.sequence_length()
+               << ", " << self.hidden_dim() << ")>";
+            return ss.str();
+        });
 
     py::class_<SimilarityResult>(m, "SimilarityResult")
-        .def("L1", &SimilarityResult::L1)
-        .def("L2", &SimilarityResult::L2)
+        .def_property_readonly("L1", &SimilarityResult::L1)
+        .def_property_readonly("L2", &SimilarityResult::L2)
         .def_property_readonly("shape", &SimilarityResult::shape)
         .def_property_readonly("similarity", [](py::object self_py) {
             auto& self = self_py.cast<SimilarityResult&>();
@@ -2856,7 +2901,13 @@ Example:
         })
         .def("get_top_k", &SimilarityResult::get_top_k, py::arg("k"))
         .def("threshold", &SimilarityResult::threshold, py::arg("cutoff"))
-        .def("normalize", &SimilarityResult::normalize);
+        .def("normalize", &SimilarityResult::normalize)
+        .def("__repr__", [](const SimilarityResult& self) {
+            std::ostringstream ss;
+            ss << "<SimilarityResult: shape=(" << self.L1()
+               << ", " << self.L2() << ")>";
+            return ss.str();
+        });
 
     // ----------------------- Format Conversion -----------------------
     m.def("_reformat",

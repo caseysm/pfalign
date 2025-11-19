@@ -20,7 +20,7 @@ def test_pairwise_posteriors_lifetime(random_embeddings):
 
     result = pfalign.pairwise(emb1, emb2)
     arr = result.posteriors  # Get numpy view
-    L1, L2 = result.L1(), result.L2()
+    L1, L2 = result.L1, result.L2
 
     # Delete the C++ object - array should keep it alive via py::object base
     del result
@@ -43,8 +43,8 @@ def test_embedding_result_lifetime(sample_pdbs):
     """Verify embeddings array keeps EmbeddingResult alive."""
     result = pfalign.encode(sample_pdbs[0], k_neighbors=8)
     arr = result.embeddings  # Get numpy view
-    L = result.sequence_length()
-    D = result.hidden_dim()
+    L = result.sequence_length
+    D = result.hidden_dim
 
     # Delete the C++ object
     del result
@@ -68,8 +68,8 @@ def test_embedding_result_array_protocol_lifetime(sample_pdbs):
 
     # Convert to numpy array via __array__ protocol
     arr = np.asarray(result)
-    L = result.sequence_length()
-    D = result.hidden_dim()
+    L = result.sequence_length
+    D = result.hidden_dim
 
     # Delete the C++ object
     del result
@@ -90,7 +90,7 @@ def test_similarity_result_lifetime(random_embeddings):
 
     result = pfalign.similarity(emb1, emb2)
     arr = result.similarity  # Get numpy view
-    L1, L2 = result.L1(), result.L2()
+    L1, L2 = result.L1, result.L2
 
     # Delete the C++ object
     del result
@@ -110,7 +110,7 @@ def test_similarity_result_array_protocol_lifetime(random_embeddings):
 
     result = pfalign.similarity(emb1, emb2)
     arr = np.asarray(result)  # Convert via __array__ (use asarray, not array)
-    L1, L2 = result.L1(), result.L2()
+    L1, L2 = result.L1, result.L2
 
     # Delete the C++ object
     del result

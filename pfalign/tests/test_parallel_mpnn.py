@@ -59,8 +59,8 @@ class TestParallelMPNNCorrectness:
         align_par = result_parallel.alignment()
         align_seq = result_sequential.alignment()
 
-        score_par = result_parallel.score()
-        score_seq = result_sequential.score()
+        score_par = result_parallel.score
+        score_seq = result_sequential.score
 
         # Alignments and scores should be identical
         assert align_par == align_seq, "Alignments differ between parallel modes"

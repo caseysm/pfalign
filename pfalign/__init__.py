@@ -56,7 +56,9 @@ __all__ = [
     "encode_batch",
     "similarity",
     "compute_distances",
+    "pdist",  # Short alias for compute_distances
     "progressive_align",
+    "msa_align",  # Short alias for progressive_align
     "reformat",
     "info",
     "version_info",
@@ -944,7 +946,7 @@ def batch_pairwise(
             'query': query,
             'target': target,
             'output': str(output_file),
-            'score': result.score(),
+            'score': result.score,
         })
 
         # Update progress
@@ -952,3 +954,8 @@ def batch_pairwise(
 
     progress_bar.finish()
     return results
+
+
+# Short aliases (SciPy-style)
+pdist = compute_distances      # Like scipy.spatial.distance.pdist
+msa_align = progressive_align  # Shorter, clearer alternative

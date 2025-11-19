@@ -1253,7 +1253,7 @@ def main():
                 k_neighbors=args.k_neighbors,
             )
             np.save(args.output, result.embeddings)
-            print_info(f"[OK] Encoded {result.sequence_length()} residues to {args.output}", args.quiet)
+            print_info(f"[OK] Encoded {result.sequence_length} residues to {args.output}", args.quiet)
 
         elif args.command == "pairwise":
             # Validate inputs
@@ -1277,7 +1277,7 @@ def main():
             result.save(args.output, format=args.format)
 
             print_info(f"[OK] Pairwise alignment complete", args.quiet)
-            print_info(f"  Score: {result.score():.4f}", args.quiet)
+            print_info(f"  Score: {result.score:.4f}", args.quiet)
             print_info(f"  Output: {args.output}", args.quiet)
 
             # Show detailed statistics if --stats flag is used
@@ -1328,9 +1328,9 @@ def main():
             result.save(args.output, format=args.format)
 
             print_info(f"[OK] MSA complete", args.quiet)
-            print_info(f"  Sequences: {result.num_sequences()}", args.quiet)
-            print_info(f"  Alignment length: {result.alignment_length()}", args.quiet)
-            print_info(f"  ECS score: {result.ecs_score():.5f}", args.quiet)
+            print_info(f"  Sequences: {result.num_sequences}", args.quiet)
+            print_info(f"  Alignment length: {result.alignment_length}", args.quiet)
+            print_info(f"  ECS score: {result.ecs_score:.5f}", args.quiet)
             print_info(f"  Output: {args.output}", args.quiet)
 
             # Show detailed statistics if --stats flag is used
@@ -1874,7 +1874,7 @@ def main():
 
                 print(f"[OK] Pairwise identity matrix computed")
                 print(f"  MSA: {args.msa}")
-                print(f"  Sequences: {msa_obj.num_sequences()}")
+                print(f"  Sequences: {msa_obj.num_sequences}")
                 print(f"  Matrix shape: {id_matrix.shape}")
                 print(f"  Mean identity: {id_matrix.mean():.2%}")
                 print(f"  Output: {args.output}")
@@ -1955,8 +1955,8 @@ def main():
 
                 print_info(f"[OK] ECS score computed (approximation)", args.quiet)
                 print_info(f"  MSA: {args.msa}", args.quiet)
-                print_info(f"  Sequences: {msa_obj.num_sequences()}", args.quiet)
-                print_info(f"  Alignment length: {msa_obj.alignment_length()}", args.quiet)
+                print_info(f"  Sequences: {msa_obj.num_sequences}", args.quiet)
+                print_info(f"  Alignment length: {msa_obj.alignment_length}", args.quiet)
                 print_info(f"  ECS score: {ecs_score:.5f}", args.quiet)
                 print_info(f"  Temperature: {args.temperature}", args.quiet)
                 print_info(f"  Note: This is an approximation based on conservation scores", args.quiet)
