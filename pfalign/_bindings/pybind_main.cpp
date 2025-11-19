@@ -585,6 +585,7 @@ MSAResult MsaFromStructures(const std::vector<std::string>& paths,
         requested_threads,  // Pass user's thread count
         [&](int current, int total) {
             if (!progress_callback.is_none()) {
+                py::gil_scoped_acquire acquire;  // Acquire GIL for Python callback from C++ thread
                 progress_callback(current, total, "Computing distances");
             }
         });
@@ -619,6 +620,7 @@ MSAResult MsaFromStructures(const std::vector<std::string>& paths,
     // Set progress callback for progressive alignment
     msa_cfg.progress_callback = [&](int current, int total) {
         if (!progress_callback.is_none()) {
+            py::gil_scoped_acquire acquire;  // Acquire GIL for Python callback from C++ thread
             progress_callback(current, total, "Progressive alignment");
         }
     };
@@ -707,6 +709,7 @@ MSAResult MsaFromEmbeddings(py::sequence embeddings,
         requested_threads,  // Pass user's thread count
         [&](int current, int total) {
             if (!progress_callback.is_none()) {
+                py::gil_scoped_acquire acquire;  // Acquire GIL for Python callback from C++ thread
                 progress_callback(current, total, "Computing distances");
             }
         });
@@ -733,6 +736,7 @@ MSAResult MsaFromEmbeddings(py::sequence embeddings,
     // Phase 5: Progressive alignment with progress callback
     msa_cfg.progress_callback = [&](int current, int total) {
         if (!progress_callback.is_none()) {
+            py::gil_scoped_acquire acquire;  // Acquire GIL for Python callback from C++ thread
             progress_callback(current, total, "Progressive alignment");
         }
     };
