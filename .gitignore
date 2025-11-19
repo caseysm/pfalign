@@ -55,6 +55,9 @@ docs/doxygen/latex/
 *.tmp
 .clang-uml.cache
 
+# Internal documentation (evaluations, notes, etc.)
+docs-internal/
+
 # Test executables (compiled binaries in root)
 precision_test*
 test_all_variants
