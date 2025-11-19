@@ -577,18 +577,21 @@ MSAResult MsaFromStructures(const std::vector<std::string>& paths,
         progress_callback(0, total_distances, "Computing distances");
     }
 
-    pfalign::msa::compute_distance_matrix_alignment(
-        cache,
-        sw_cfg,
-        &scratch,
-        distances.data(),
-        requested_threads,  // Pass user's thread count
-        [&](int current, int total) {
-            if (!progress_callback.is_none()) {
-                py::gil_scoped_acquire acquire;  // Acquire GIL for Python callback from C++ thread
-                progress_callback(current, total, "Computing distances");
-            }
-        });
+    {
+        py::gil_scoped_release release;  // Release GIL before spawning worker threads
+        pfalign::msa::compute_distance_matrix_alignment(
+            cache,
+            sw_cfg,
+            &scratch,
+            distances.data(),
+            requested_threads,  // Pass user's thread count
+            [&](int current, int total) {
+                if (!progress_callback.is_none()) {
+                    py::gil_scoped_acquire acquire;  // Acquire GIL in worker thread for callback
+                    progress_callback(current, total, "Computing distances");
+                }
+            });
+    }  // GIL reacquired here
 
     // Phase 3 complete
     if (!progress_callback.is_none()) {
@@ -631,11 +634,15 @@ MSAResult MsaFromStructures(const std::vector<std::string>& paths,
         progress_callback(0, total_merges, "Progressive alignment");
     }
 
-    auto msa_result = pfalign::msa::progressive_msa<pfalign::ScalarBackend>(
-        cache,
-        tree,
-        msa_cfg,
-        &arena);
+    pfalign::msa::MSAResult msa_result;
+    {
+        py::gil_scoped_release release;  // Release GIL before spawning worker threads
+        msa_result = pfalign::msa::progressive_msa<pfalign::ScalarBackend>(
+            cache,
+            tree,
+            msa_cfg,
+            &arena);
+    }  // GIL reacquired here
 
     // Phase 5 complete
     if (!progress_callback.is_none()) {
@@ -701,18 +708,21 @@ MSAResult MsaFromEmbeddings(py::sequence embeddings,
 
     // Phase 3: Computing distances with progress callback
     const size_t requested_threads = threads > 0 ? static_cast<size_t>(threads) : 0;
-    pfalign::msa::compute_distance_matrix_alignment(
-        cache,
-        sw_cfg,
-        &scratch,
-        distances.data(),
-        requested_threads,  // Pass user's thread count
-        [&](int current, int total) {
-            if (!progress_callback.is_none()) {
-                py::gil_scoped_acquire acquire;  // Acquire GIL for Python callback from C++ thread
-                progress_callback(current, total, "Computing distances");
-            }
-        });
+    {
+        py::gil_scoped_release release;  // Release GIL before spawning worker threads
+        pfalign::msa::compute_distance_matrix_alignment(
+            cache,
+            sw_cfg,
+            &scratch,
+            distances.data(),
+            requested_threads,  // Pass user's thread count
+            [&](int current, int total) {
+                if (!progress_callback.is_none()) {
+                    py::gil_scoped_acquire acquire;  // Acquire GIL in worker thread for callback
+                    progress_callback(current, total, "Computing distances");
+                }
+            });
+    }  // GIL reacquired here
 
     // Phase 4: Building guide tree
     if (!progress_callback.is_none()) {
@@ -741,11 +751,15 @@ MSAResult MsaFromEmbeddings(py::sequence embeddings,
         }
     };
 
-    auto msa_result = pfalign::msa::progressive_msa<pfalign::ScalarBackend>(
-        cache,
-        tree,
-        msa_cfg,
-        &arena);
+    pfalign::msa::MSAResult msa_result;
+    {
+        py::gil_scoped_release release;  // Release GIL before spawning worker threads
+        msa_result = pfalign::msa::progressive_msa<pfalign::ScalarBackend>(
+            cache,
+            tree,
+            msa_cfg,
+            &arena);
+    }  // GIL reacquired here
 
     auto converted = ConvertProfileToResult(msa_result);
     pfalign::msa::Profile::destroy(msa_result.alignment);
