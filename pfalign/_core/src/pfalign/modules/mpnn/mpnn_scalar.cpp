@@ -805,6 +805,7 @@ message_passing_layer(float* h_V,  // Node embeddings [L * hidden_dim]
             }
         }
 
+#ifndef NDEBUG
         static bool dumped_messages = false;
         if (!dumped_messages) {
             std::ofstream out("layer0_messages.bin", std::ios::binary);
@@ -820,6 +821,7 @@ message_passing_layer(float* h_V,  // Node embeddings [L * hidden_dim]
             out_res.close();
             dumped_residual = true;
         }
+#endif
     }  // End MPNN_layer_aggregate
 
     //    std::cout << "Aggregated messages h_temp[0][:5]: ";
@@ -842,6 +844,7 @@ message_passing_layer(float* h_V,  // Node embeddings [L * hidden_dim]
         }
     }
 
+#ifndef NDEBUG
     static bool dumped_norm1 = false;
     if (!dumped_norm1) {
         std::ofstream out_norm("layer0_h_V_norm1.bin", std::ios::binary);
@@ -849,6 +852,7 @@ message_passing_layer(float* h_V,  // Node embeddings [L * hidden_dim]
         out_norm.close();
         dumped_norm1 = true;
     }
+#endif
 
     // Step 5: Position-wise FFN
     {
@@ -865,6 +869,7 @@ message_passing_layer(float* h_V,  // Node embeddings [L * hidden_dim]
         }
         gelu(ffn_hidden, L * 4 * hidden_dim);
 
+#ifndef NDEBUG
         static bool dumped_ffn_in = false;
         if (!dumped_ffn_in) {
             std::ofstream out_ffn_in("layer0_ffn_in.bin", std::ios::binary);
@@ -874,11 +879,13 @@ message_passing_layer(float* h_V,  // Node embeddings [L * hidden_dim]
             //        std::cout << "Dumped layer0_ffn_in.bin" << std::endl;
             dumped_ffn_in = true;
         }
+#endif
 
         // FFN output layer: [4*hidden_dim -> hidden_dim]
         pfalign::gemm::gemm<ScalarBackend>(ffn_hidden, weights.ffn_W_out_weight.data(), h_temp, L,
                                            hidden_dim, 4 * hidden_dim, 1.0f, 0.0f);
 
+#ifndef NDEBUG
         static bool dumped_ffn_linear = false;
         if (!dumped_ffn_linear) {
             std::ofstream out_ffn_lin("layer0_ffn_linear.bin", std::ios::binary);
@@ -887,6 +894,7 @@ message_passing_layer(float* h_V,  // Node embeddings [L * hidden_dim]
             out_ffn_lin.close();
             dumped_ffn_linear = true;
         }
+#endif
         for (int i = 0; i < L; i++) {
             for (int d = 0; d < hidden_dim; d++) {
                 h_temp[i * hidden_dim + d] += weights.ffn_W_out_bias[d] + h_V[i * hidden_dim + d];
@@ -899,6 +907,7 @@ message_passing_layer(float* h_V,  // Node embeddings [L * hidden_dim]
         }
     }  // End MPNN_layer_ffn
 
+#ifndef NDEBUG
     static bool dumped_ffn_out = false;
     if (!dumped_ffn_out) {
         std::ofstream out_ffn_out("layer0_ffn_out.bin", std::ios::binary);
@@ -916,6 +925,7 @@ message_passing_layer(float* h_V,  // Node embeddings [L * hidden_dim]
         //        std::cout << "Dumped layer0_h_V_res2.bin" << std::endl;
         dumped_res2 = true;
     }
+#endif
 
     // Step 6: Edge update (after node update is complete)
     // Use batched version - processes all L*k edges in 3 large GEMMs
@@ -924,6 +934,7 @@ message_passing_layer(float* h_V,  // Node embeddings [L * hidden_dim]
         batched_edge_update(h_V, h_E, neighbor_indices, L, k, hidden_dim, weights, temp_arena);
     }
 
+#ifndef NDEBUG
     static bool dumped_edge = false;
     if (!dumped_edge) {
         std::ofstream out_edge("layer0_h_E_after.bin", std::ios::binary);
@@ -931,6 +942,7 @@ message_passing_layer(float* h_V,  // Node embeddings [L * hidden_dim]
         out_edge.close();
         dumped_edge = true;
     }
+#endif
 
     // No cleanup needed - Arena handles automatic deallocation
 }
@@ -1094,6 +1106,7 @@ void mpnn_forward<ScalarBackend>(const float* coords, int L, const MPNNWeights& 
         }
     }
 
+#ifndef NDEBUG
     static bool dumped_edge_before = false;
     if (!dumped_edge_before) {
         std::ofstream out_edge_before("layer0_h_E_before.bin", std::ios::binary);
@@ -1102,6 +1115,7 @@ void mpnn_forward<ScalarBackend>(const float* coords, int L, const MPNNWeights& 
         out_edge_before.close();
         dumped_edge_before = true;
     }
+#endif
 
     //    std::cout << "\n=== V2 Intermediate Values ===" << std::endl;
     DEBUG_PRINT_ARRAY("h_E_init[0,0]", ws->edge_emb, config.hidden_dim);

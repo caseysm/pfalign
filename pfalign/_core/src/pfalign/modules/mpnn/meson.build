@@ -10,6 +10,7 @@ mpnn_scalar_lib = static_library('mpnn_scalar',
     common_dep,
     primitives_dep,  # Includes: gemm, rbf, knn, layer_norm, gather
   ],
+  cpp_args: get_option('buildtype') != 'debug' ? ['-DNDEBUG'] : [],
   install: false,
 )
 
